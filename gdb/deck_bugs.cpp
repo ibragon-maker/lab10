@@ -18,11 +18,19 @@
 
 class RawDeck {
 public:
-  RawDeck() : cards_{new Card[52]}, size_{52} {
-    for (int i = 0; i < size_; ++i) {
-      cards_[i] = Card{i % 13 + 1, static_cast<Suit>(i / 13)};
+RawDeck() : size_{52} {
+        cards_ = new Card[size_];
+        for (int i = 0; i < size_; ++i) {
+            cards_[i] = Card{i % 13 + 1, static_cast<Suit>(i / 13)};
+        }
     }
-  }
+
+RawDeck(const RawDeck &other) : size_{other.size_} {
+        cards_ = new Card[size_];
+        for (int i = 0; i < size_; ++i) {
+            cards_[i] = other.cards_[i];
+        }
+    }
 
   ~RawDeck() { delete[] cards_; }
 
@@ -37,11 +45,10 @@ private:
 
 // Bug 1
 void deal_a_hand() {
-  Card *hand = new Card[52];
-  hand[0] = Card{9, Suit::clubs};
-  std::cout << "Top card: " << hand[0].to_string() << "\n";
+    Card *hand = new Card[52];
+    std::cout << "Top card: " << hand[0].to_string() << std::endl;
+    delete[] hand;
 }
-
 // Bug 2
 void copy_a_deck() {
   RawDeck original;
@@ -51,12 +58,11 @@ void copy_a_deck() {
 
 // Bug 3
 void clear_a_table() {
-  Card *table = new Card[5];
-  table[0] = Card{12, Suit::hearts};
-  std::cout << "Table card: " << table[0].to_string() << "\n";
-  delete[] table;
-  std::cout << "Table cleared.\n";
-  delete[] table;
+    Card *table = new Card[5];
+    table[0] = Card{12, Suit::hearts};
+    std::cout << "Table card: " << table[0].to_string() << "\n";
+    delete[] table;
+    std::cout << "Table cleared.\n";
 }
 
 int main(int argc, char *argv[]) {
